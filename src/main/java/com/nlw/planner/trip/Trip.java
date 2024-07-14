@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+@Table(name = "trips")
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Trip {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -39,12 +39,16 @@ public class Trip {
     @Column(name = "owner_email", nullable = false)
     private String ownerEmail;
 
-    public Trip(TripRequestPayload trip) {
+    public Trip(TripCreatePayload trip) {
         this.destination = trip.destination();
         this.ownerName = trip.owner_name();
         this.ownerEmail = trip.owner_email();
-        this.startsAt = LocalDateTime.parse(trip.starts_at(), DateTimeFormatter.ISO_LOCAL_DATE);
-        this.endsAt = LocalDateTime.parse(trip.ends_at(), DateTimeFormatter.ISO_LOCAL_DATE);
+        this.startsAt = LocalDateTime.parse(trip.starts_at(), DateTimeFormatter.ISO_DATE_TIME);
+        this.endsAt = LocalDateTime.parse(trip.ends_at(), DateTimeFormatter.ISO_DATE_TIME);
         this.isConfirmed = false;
+    }
+
+    public UUID getId() {
+        return this.id;
     }
 }
