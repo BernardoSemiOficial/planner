@@ -1,4 +1,6 @@
 package com.nlw.planner.participant;
 
-public record ParticipantBase() {
+import java.util.UUID;
+
+public record ParticipantBase(UUID id, String name, String email, Boolean isConfirmed) {
 }
