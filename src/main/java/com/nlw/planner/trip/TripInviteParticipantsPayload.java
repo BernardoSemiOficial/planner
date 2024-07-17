@@ -1,4 +1,6 @@
 package com.nlw.planner.trip;
 
-public record TripInviteParticipantsPayload() {
+import java.util.List;
+
+public record TripInviteParticipantsPayload(List<String> emails_to_invite) {
 }

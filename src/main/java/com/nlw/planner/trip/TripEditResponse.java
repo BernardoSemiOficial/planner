@@ -1,4 +1,4 @@
 package com.nlw.planner.trip;
 
-public record TripEditResponse() {
+public record TripEditResponse (Trip trip) {
 }
