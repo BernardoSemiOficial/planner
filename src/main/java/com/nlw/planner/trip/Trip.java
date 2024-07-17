@@ -48,7 +48,22 @@ public class Trip {
         this.isConfirmed = false;
     }
 
-    public UUID getId() {
-        return this.id;
+    public Trip(TripEditPayload trip) {
+        this.destination = trip.destination();
+        this.startsAt = LocalDateTime.parse(trip.starts_at(), DateTimeFormatter.ISO_DATE_TIME);
+        this.endsAt = LocalDateTime.parse(trip.ends_at(), DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "id=" + id +
+                ", destination='" + destination + '\'' +
+                ", startsAt=" + startsAt +
+                ", endsAt=" + endsAt +
+                ", isConfirmed=" + isConfirmed +
+                ", ownerName='" + ownerName + '\'' +
+                ", ownerEmail='" + ownerEmail + '\'' +
+                '}';
     }
 }

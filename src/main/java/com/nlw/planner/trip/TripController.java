@@ -1,5 +1,7 @@
 package com.nlw.planner.trip;
 
+import com.nlw.planner.participant.Participant;
+import com.nlw.planner.participant.ParticipantBase;
 import com.nlw.planner.participant.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +38,55 @@ public class TripController {
         Trip newTrip = new Trip(payload);
 
         this.tripRepository.save(newTrip);
-        this.participantService.registerParticipantsToTrip(payload.emails_to_invite(), newTrip.getId());
+        List<ParticipantBase> participantsDB = this.participantService.registerParticipantsToTrip(payload.emails_to_invite(), newTrip);
 
-        return ResponseEntity.ok(new TripCreateResponse(newTrip.getId()));
+        return ResponseEntity.ok(new TripCreateResponse(newTrip.getId(), participantsDB));
+    }
+
+    @PutMapping("/{tripId}")
+    public ResponseEntity<Trip> editTrip(@PathVariable UUID tripId, @RequestBody TripEditPayload payload) {
+        Optional<Trip> tripDB = this.tripRepository.findById(tripId);
+        Trip tripUpdate = new Trip(payload);
+        if(tripDB.isPresent()) {
+            Trip trip = tripDB.get();
+            trip.setDestination(tripUpdate.getDestination());
+            trip.setStartsAt(tripUpdate.getStartsAt());
+            trip.setEndsAt(tripUpdate.getEndsAt());
+            this.tripRepository.save(trip);
+            return ResponseEntity.ok(trip);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{tripId}/confirm")
+    public ResponseEntity<Trip> confirmTrip(@PathVariable UUID tripId) {
+        Optional<Trip> trip = this.tripRepository.findById(tripId);
+        if(trip.isPresent()) {
+            Trip tripDB = trip.get();
+            tripDB.setIsConfirmed(true);
+            this.tripRepository.save(tripDB);
+            this.participantService.triggerConfirmationEmailToParticipants(tripDB.getId());
+            return ResponseEntity.ok(tripDB);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/{tripId}/invites")
+    public ResponseEntity<Object> inviteParticipants(@PathVariable UUID tripId, @RequestBody TripInviteParticipantsPayload payload) {
+        Optional<Trip> trip = this.tripRepository.findById(tripId);
+        if(trip.isPresent()) {
+            List<ParticipantBase> participantsDB = this.participantService.registerParticipantsToTrip(payload.emails_to_invite(), trip.get());
+            if(trip.get().getIsConfirmed()) {
+                this.participantService.triggerConfirmationEmailToParticipants(participantsDB);
+            }
+            return ResponseEntity.ok(participantsDB);
+        }
+        return ResponseEntity.status(400).body("Trip not found");
+    }
+
+    @GetMapping("/{tripId}/participants")
+    public ResponseEntity<List<ParticipantBase>> getAllParticipantsByTripId(@PathVariable UUID tripId) {
+        List<ParticipantBase> participants = this.participantService.getAllParticipants(tripId);
+        return ResponseEntity.ok(participants);
     }
 }
