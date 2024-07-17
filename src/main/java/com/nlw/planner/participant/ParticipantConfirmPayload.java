@@ -1,4 +1,4 @@
 package com.nlw.planner.participant;
 
-public record ParticipantConfirmPayload() {
+public record ParticipantConfirmPayload(String name) {
 }
