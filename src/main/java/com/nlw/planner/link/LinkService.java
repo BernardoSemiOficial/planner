@@ -1,4 +1,4 @@
-package com.nlw.planner.links;
+package com.nlw.planner.link;
 
 import com.nlw.planner.trip.Trip;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,13 +1,12 @@
 package com.nlw.planner.trip;
 
-import com.nlw.planner.activities.ActivityBase;
-import com.nlw.planner.activities.ActivityCreatePaylod;
-import com.nlw.planner.activities.ActivityCreateResponse;
-import com.nlw.planner.activities.ActivityService;
-import com.nlw.planner.links.LinkBase;
-import com.nlw.planner.links.LinkCreatePayload;
-import com.nlw.planner.links.LinkService;
-import com.nlw.planner.participant.Participant;
+import com.nlw.planner.activity.ActivityBase;
+import com.nlw.planner.activity.ActivityCreatePaylod;
+import com.nlw.planner.activity.ActivityCreateResponse;
+import com.nlw.planner.activity.ActivityService;
+import com.nlw.planner.link.LinkBase;
+import com.nlw.planner.link.LinkCreatePayload;
+import com.nlw.planner.link.LinkService;
 import com.nlw.planner.participant.ParticipantBase;
 import com.nlw.planner.participant.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;

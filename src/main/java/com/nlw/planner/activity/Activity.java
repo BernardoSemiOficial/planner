@@ -1,4 +1,4 @@
-package com.nlw.planner.activities;
+package com.nlw.planner.activity;
 
 import com.nlw.planner.trip.Trip;
 import jakarta.persistence.*;
@@ -7,10 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity()
