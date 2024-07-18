@@ -31,6 +31,12 @@ public class Link {
     @JoinColumn(name = "trip_id")
     private Trip trip;
 
+    public Link(LinkCreatePayload link, Trip trip) {
+        this.title = link.title();
+        this.url = link.url();
+        this.trip = trip;
+    }
+
     @Override
     public String toString() {
         return "Link{" +

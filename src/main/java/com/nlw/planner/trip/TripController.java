@@ -5,6 +5,7 @@ import com.nlw.planner.activities.ActivityCreatePaylod;
 import com.nlw.planner.activities.ActivityCreateResponse;
 import com.nlw.planner.activities.ActivityService;
 import com.nlw.planner.links.LinkBase;
+import com.nlw.planner.links.LinkCreatePayload;
 import com.nlw.planner.links.LinkService;
 import com.nlw.planner.participant.Participant;
 import com.nlw.planner.participant.ParticipantBase;
@@ -122,5 +123,15 @@ public class TripController {
     public ResponseEntity<List<LinkBase>> getAllLinksByTripId(@PathVariable UUID tripId) {
         List<LinkBase> links = this.linkService.getAllLinksByTripId(tripId);
         return ResponseEntity.ok(links);
+    }
+
+    @PostMapping("/{tripId}/links")
+    public ResponseEntity<LinkBase> createLink(@PathVariable UUID tripId, @RequestBody LinkCreatePayload payload) {
+       Optional<Trip> trip = this.tripRepository.findById(tripId);
+       if(trip.isPresent()) {
+          LinkBase link = this.linkService.createLink(payload, trip.get());
+          return ResponseEntity.ok(link);
+       }
+       return ResponseEntity.notFound().build();
     }
 }

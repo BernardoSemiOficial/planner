@@ -1,4 +1,4 @@
 package com.nlw.planner.links;
 
-public record LinkCreatePayload() {
+public record LinkCreatePayload(String title, String url) {
 }
