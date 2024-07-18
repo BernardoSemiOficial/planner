@@ -4,6 +4,8 @@ import com.nlw.planner.activities.ActivityBase;
 import com.nlw.planner.activities.ActivityCreatePaylod;
 import com.nlw.planner.activities.ActivityCreateResponse;
 import com.nlw.planner.activities.ActivityService;
+import com.nlw.planner.links.LinkBase;
+import com.nlw.planner.links.LinkService;
 import com.nlw.planner.participant.Participant;
 import com.nlw.planner.participant.ParticipantBase;
 import com.nlw.planner.participant.ParticipantService;
@@ -24,6 +26,9 @@ public class TripController {
 
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private LinkService linkService;
 
     @Autowired
     private TripRepository tripRepository;
@@ -111,5 +116,11 @@ public class TripController {
     public ResponseEntity<List<ActivityBase>> getAllActivitiesByTripId(@PathVariable UUID tripId) {
         List<ActivityBase> activities = this.activityService.getAllActivityByTripId(tripId);
         return ResponseEntity.ok(activities);
+    }
+
+    @GetMapping("/{tripId}/links")
+    public ResponseEntity<List<LinkBase>> getAllLinksByTripId(@PathVariable UUID tripId) {
+        List<LinkBase> links = this.linkService.getAllLinksByTripId(tripId);
+        return ResponseEntity.ok(links);
     }
 }
