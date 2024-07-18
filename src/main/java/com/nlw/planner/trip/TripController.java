@@ -1,5 +1,9 @@
 package com.nlw.planner.trip;
 
+import com.nlw.planner.activities.ActivityBase;
+import com.nlw.planner.activities.ActivityCreatePaylod;
+import com.nlw.planner.activities.ActivityCreateResponse;
+import com.nlw.planner.activities.ActivityService;
 import com.nlw.planner.participant.Participant;
 import com.nlw.planner.participant.ParticipantBase;
 import com.nlw.planner.participant.ParticipantService;
@@ -17,6 +21,9 @@ public class TripController {
 
     @Autowired
     private ParticipantService participantService;
+
+    @Autowired
+    private ActivityService activityService;
 
     @Autowired
     private TripRepository tripRepository;
@@ -88,5 +95,21 @@ public class TripController {
     public ResponseEntity<List<ParticipantBase>> getAllParticipantsByTripId(@PathVariable UUID tripId) {
         List<ParticipantBase> participants = this.participantService.getAllParticipants(tripId);
         return ResponseEntity.ok(participants);
+    }
+
+    @PostMapping("/{tripId}/activities")
+    public ResponseEntity<ActivityCreateResponse> createActivity(@PathVariable UUID tripId, @RequestBody ActivityCreatePaylod payload) {
+        Optional<Trip> trip = this.tripRepository.findById(tripId);
+        if(trip.isPresent()) {
+            ActivityCreateResponse activity = this.activityService.createActivity(payload, trip.get());
+            return ResponseEntity.ok(activity);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{tripId}/activities")
+    public ResponseEntity<List<ActivityBase>> getAllActivitiesByTripId(@PathVariable UUID tripId) {
+        List<ActivityBase> activities = this.activityService.getAllActivityByTripId(tripId);
+        return ResponseEntity.ok(activities);
     }
 }
